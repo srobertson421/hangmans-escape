@@ -10,7 +10,6 @@ Level.prototype = {
     preload: function() {
         
         this.game.load.image('movingGround', './assets/ground.png');
-        this.game.load.image('tiles', './assets/Tilesheet.png');
         this.game.load.image('smallCloud', './assets/cloud2.png');
         this.game.load.image('bigCloud', './assets/cloud1.png');
         
@@ -18,16 +17,23 @@ Level.prototype = {
     
     create: function() {
         
-        // Starting the physics for the level
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        letters.create();
+        
+        player.create();
+        
+        word.create();
+        
+        $('#def').append(word.def);
+
         this.game.physics.arcade.gravity.y = 500;
         
         // Making the ground and then making it move
-        this.movingGround = this.game.add.tileSprite(0.5, 0.5, 800, 320, 'movingGround');
-        this.game.physics.enable(this.movingGround, Phaser.Physics.ARCADE);
+        this.movingGround = this.game.add.tileSprite(0, this.game.world.height - 30, 800, 33, 'movingGround');
+        this.movingGround.physicsType = Phaser.SPRITE;
+        this.game.physics.arcade.enable(this.movingGround);
         this.movingGround.body.immovable = true;
         this.movingGround.body.allowGravity = false;
-        this.movingGround.body.setSize(800, 33, 0, 287);
+        this.movingGround.body.setSize(800, 32);
         
         // Making the big cloud
         this.cloudBig = this.game.add.sprite(450, 25, 'bigCloud');
@@ -62,9 +68,11 @@ Level.prototype = {
     
     update: function() {
         
+        player.update();
+        
+        letters.update();
+        
         this.movingGround.tilePosition.x -=1.5;
         
     }
-    
-    
 };

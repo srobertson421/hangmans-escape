@@ -18,30 +18,21 @@ var boot_state = {
     create: function() {
         
         game.stage.backgroundColor = '000000';
+        game.input.maxPointers = 1;
         game.physics.startSystem(Phaser.Physics.ARCADE);
+            
+        // set the type of scaling to "show-all"
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        // Add a blue color to the page, to hide the white borders we might have
+        document.body.style.backgroundColor = '000';
         
-        if (!game.device.desktop) {
-            
-            // set the type of scaling to "show-all"
-            game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-            
-            // Add a blue color to the page, to hide the white borders we might have
-            document.body.style.backgroundColor = '000';
-            
-            // Set the min and max width/height of the game
-            game.scale.minWidth = 250;
-            game.scale.minHeight = 170;
-            game.scale.maxWidth = 1000;
-            game.scale.maxHeight = 680;
-            
-            // Center the game on the screen
-            game.scale.pageAlignHorizontally = true;
-            game.scale.pageAlignVertically = true;
-            
-            // Appy the scale changes
-            game.scale.setScreenSize(true);
-            
-        }
+        // Center the game on the screen
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true;
+
+        // Appy the scale changes
+        game.scale.setScreenSize(true);
         
         game.state.start('menu');
         
@@ -54,6 +45,8 @@ var load_state = {
 
     preload: function() {
         
+        
+        
         player = new Player(game);
         player.preload();
         
@@ -63,7 +56,7 @@ var load_state = {
         level = new Level(game);
         level.preload();
         
-        var loadingLabel = game.add.text(game.world.centerX, 150, 'Finding you a good word...', { font: '30px Frijole', fill: '#ffffff' });
+        var loadingLabel = game.add.bitmapText(game.world.centerX, 150, 'pixel', 'Finding you a good word...', 32);
         loadingLabel.anchor.setTo(0.5, 0.5);
         
         var progressBar = game.add.sprite(game.world.centerX, 200, 'progressBar');
@@ -87,20 +80,20 @@ var load_state = {
 
 // Menu state
 var menu_state = {
-
+    
+    preload: function() {
+        game.load.bitmapFont('pixel', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
+    },
+    
     create: function() {
         
-        var style1 = {font: "30px Frijole", fill: "#FFFFFF"};
-        var style2 = {font: "50px Frijole", fill: "#FFFFFF"};
-        
-        var text1 = game.add.text(this.game.world.centerX, 150, "Hangman's Escape", style2);
-        var text2 = game.add.text(this.game.world.centerX, 200, 'Press Enter to start!', style1);
+        var text1 = game.add.bitmapText(this.game.world.centerX, 150, 'pixel', "Hangman's Escape", 32);
+        var text2 = game.add.bitmapText(this.game.world.centerX, 200, 'pixel', 'Tap to start!', 50);
         
         text1.anchor.setTo(0.5, 0.5);
         text2.anchor.setTo(0.5, 0.5);
         
-        enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-        enterKey.onDown.addOnce(gameStart, this);
+        game.input.onDown.addOnce(gameStart, this);
         
         function gameStart() {
             game.state.start('load');
@@ -115,26 +108,22 @@ var main_state = {
     
     create: function () {
         
-        letters.create();
-        
         level.create();
-        
-        player.create();
-        
-        word.create();
-        
-        $('#def').append(word.def);
     
     },
     
     update: function () {
         
-        letters.update();
-        
-        player.update();
+        // Collision between player and ground
+        this.game.physics.arcade.collide(player.guy, level.movingGround);
         
         level.update();
 
+    },
+    
+    render: function() {
+        game.debug.body(player.guy);
+        game.debug.bodyInfo(player.guy, 32, 32);
     }
 };
 
@@ -142,20 +131,16 @@ var main_state = {
 var victory_state = {
     
     create: function() {
-        
-        var style1 = {font: "30px Frijole", fill: "#FFFFFF"};
-        var style2 = {font: "50px Frijole", fill: "#FFFFFF"};
-        
-        var text1 = game.add.text(this.game.world.centerX, 150, "You Win!!", style2);
-        var text2 = game.add.text(this.game.world.centerX, 250, 'Press Enter to play again!', style1);
-        var text3 = game.add.text(this.game.world.centerX, 200, 'The word was... ' + word.word, style1);
+
+        var text1 = game.add.bitmapText(this.game.world.centerX, 150, 'pixel', "You Win!!", 50);
+        var text2 = game.add.bitmapText(this.game.world.centerX, 250, 'pixel', 'Tap to play again!', 32);
+        var text3 = game.add.bitmapText(this.game.world.centerX, 200, 'pixel', 'The word was... ' + word.word, 32);
         
         text1.anchor.setTo(0.5, 0.5);
         text2.anchor.setTo(0.5, 0.5);
         text3.anchor.setTo(0.5, 0.5);
         
-        enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-        enterKey.onDown.addOnce(gameStart, this);
+        game.input.onDown.addOnce(gameStart, this);
         
         function gameStart() {
             game.state.start('menu');
@@ -169,19 +154,15 @@ var game_over = {
     
     create: function() {
         
-        var style1 = {font: "30px Frijole", fill: "#FFFFFF"};
-        var style2 = {font: "50px Frijole", fill: "#F00"};
-        
-        var text1 = game.add.text(this.game.world.centerX, 150, "Game Over", style2);
-        var text2 = game.add.text(this.game.world.centerX, 250, 'Press Enter to start!', style1);
-        var text3 = game.add.text(this.game.world.centerX, 200, 'The word was... ' + word.word, style1);
+        var text1 = game.add.bitmapText(this.game.world.centerX, 150, 'pixel', "Game Over", 50);
+        var text2 = game.add.bitmapText(this.game.world.centerX, 250, 'pixel', 'Tap to play again!', 32);
+        var text3 = game.add.bitmapText(this.game.world.centerX, 200, 'pixel', 'The word was... ' + word.word, 32);
         
         text1.anchor.setTo(0.5, 0.5);
         text2.anchor.setTo(0.5, 0.5);
         text3.anchor.setTo(0.5, 0.5);
         
-        enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-        enterKey.onDown.addOnce(gameStart, this);
+        game.input.onDown.addOnce(gameStart, this);
         
         function gameStart() {
             game.state.start('menu');

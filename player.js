@@ -1,6 +1,5 @@
 Player = function(game) {
     this.game = game;
-    this.group = null;
     this.guy = null;
     this.cursors = null;
     this.jumpSound = null;
@@ -32,17 +31,18 @@ Player.prototype = {
         this.game.camera.follow(this.guy);
         
         // Player Physics
-        this.game.physics.enable(this.guy, Phaser.Physics.ARCADE);
+        this.game.physics.arcade.enable(this.guy);
         this.guy.body.collideWorldBounds = true;
         this.guy.anchor.setTo(0.5, 0.5);
+        this.guy.body.setSize(15, 52);
         
         // Create the keyboard cursor keys
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.wasd = {
-            up: game.input.keyboard.addKey(Phaser.Keyboard.W),
-            left: game.input.keyboard.addKey(Phaser.Keyboard.A),
-            right: game.input.keyboard.addKey(Phaser.Keyboard.D),
-            down: game.input.keyboard.addKey(Phaser.Keyboard.S)
+            up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
+            left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
+            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D),
+            down: this.game.input.keyboard.addKey(Phaser.Keyboard.S)
         }
         
         // Audio
@@ -53,9 +53,6 @@ Player.prototype = {
     },
     
     update: function() {
-        
-        // Collision between player and ground
-        this.game.physics.arcade.collide(this.guy, level.movingGround);
         
         this.guy.body.velocity.x = 0;
         
@@ -72,6 +69,7 @@ Player.prototype = {
             
             this.guy.animations.stop();
             this.guy.frameName = 'rightJump8';
+            this.guy.body.height = 45;
             this.guy.y += 3.5;
             
         }
@@ -90,6 +88,7 @@ Player.prototype = {
         else {
             
             this.guy.animations.play('runRight');
+            this.guy.body.height = 52;
             
         }
         if (this.guy.y < 231) {

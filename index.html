@@ -3,37 +3,10 @@
     <title>Side-Scroller</title>
     <meta charset="UTF-8" />
     <link href='http://fonts.googleapis.com/css?family=Frijole' rel='stylesheet' type='text/css'>
-    <style>
-        body {
-            font-family: 'Frijole', cursive;
-            margin: 0 auto;
-            margin-top: 150px;
-            background: url(assets/chalkboard.jpg) center no-repeat;
-        }
-        #game {
-            width: 800px;
-            height: 320px;
-            margin: 0 auto;
-        }
-        #instructions {
-            text-align: center;
-            color: #FFFFFF
-        }
-    </style>
 </head>
 <body>
     <div id="game"></div>
-    <div id="instructions">
-        <div id="def"></div>
-        <h1>Collect the correct letters to spell the hidden word!</h1>
-        <h2 style="color: red;">If you get 6 wrong letters it's game over!</h2>
-        <h3>Controls</h3>
-        <p>Use the WASD to control hangman!</p>
-        <p>W = Jump</p>
-        <p>S = Duck</p>
-        <p>A = Move left<p>
-        <p>D = Move right<p>
-    </div>
+    <div id="def" style="color: white;"></div>
     <script src="./lib/jquery-2.1.1.min.js"></script>
     <script src="./phaser.min.js"></script>
     <script src="./level.js"></script>
