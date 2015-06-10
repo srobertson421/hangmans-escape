@@ -1,1 +1,0 @@
-a.png 0 2, m.png 0 40, s.png 2 58, g.png 3 23, b.png 22 3, t.png 22 58, h.png 23 22, n.png 24 41, u.png 40 59, i.png 41 22, o.png 41 40, c.png 42 3, j.png 58 20, v.png 58 62, d.png 61 4, p.png 61 41, w.png 76 59, q.png 77 41, k.png 79 21, e.png 80 3, x.png 95 59, f.png 98 3, r.png 98 39, l.png 100 20, y.png 1 76, z.png 22 78.

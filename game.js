@@ -45,8 +45,6 @@ var load_state = {
 
     preload: function() {
         
-        
-        
         player = new Player(game);
         player.preload();
         
@@ -73,22 +71,48 @@ var load_state = {
     },
     
     create: function() {
-        game.state.start('main');
+        game.state.start('definition');
     }
 
 };
+
+var timerText;
+
+var definition_state = {
+    
+    create: function() {
+        
+        var title = game.add.bitmapText(this.game.world.centerX, 150, 'pixel', "Definition", 32);
+        var def = game.add.text(this.game.world.centerX, 200, word.def, {font: "25px Arial", fill: "#FFFFFF", wordWrap: true, wordWrapWidth: this.game.world.width});
+        timerText = game.add.text(this.game.world.centerX, this.game.world.height - 30, "Starting in...\n" + Math.floor(game.time.events.duration / 1000), {font: "28px Arial", fill: "#FF0000", align: 'center'});
+        
+        title.anchor.setTo(0.5, 0.5);
+        def.anchor.setTo(0.5, 0.5);
+        timerText.anchor.setTo(0.5, 0.5);
+        
+        game.time.events.add(Phaser.Timer.SECOND * 10, gameStart, this);
+        
+        function gameStart() {
+            game.state.start('main');
+        }
+    },
+    
+    update: function() {
+        timerText.text = "Starting in...\n" + Math.floor(game.time.events.duration / 1000);
+    }
+}
 
 // Menu state
 var menu_state = {
     
     preload: function() {
-        game.load.bitmapFont('pixel', 'assets/fonts/font.png', 'assets/fonts/font.fnt');
+        game.load.bitmapFont('pixel', 'assets/fonts/font.png', 'assets/fonts/font.xml');
     },
     
     create: function() {
         
-        var text1 = game.add.bitmapText(this.game.world.centerX, 150, 'pixel', "Hangman's Escape", 32);
-        var text2 = game.add.bitmapText(this.game.world.centerX, 200, 'pixel', 'Tap to start!', 50);
+        var text1 = game.add.bitmapText(this.game.world.centerX, 150, 'pixel', "Hangman's Escape", 50);
+        var text2 = game.add.bitmapText(this.game.world.centerX, 200, 'pixel', 'Tap to start!', 32);
         
         text1.anchor.setTo(0.5, 0.5);
         text2.anchor.setTo(0.5, 0.5);
@@ -119,11 +143,6 @@ var main_state = {
         
         level.update();
 
-    },
-    
-    render: function() {
-        game.debug.body(player.guy);
-        game.debug.bodyInfo(player.guy, 32, 32);
     }
 };
 
@@ -174,6 +193,7 @@ var game_over = {
 game.state.add('boot', boot_state);
 game.state.add('load', load_state);
 game.state.add('menu', menu_state);
+game.state.add('definition', definition_state)
 game.state.add('main', main_state);
 game.state.add('victory', victory_state);
 game.state.add('game-over', game_over);

@@ -56,14 +56,14 @@ Word.prototype = {
         });
     },
     
-    getDef: function(word) {
+    getDef: function(newWord) {
         
         $.ajax({
             type: 'GET',
-            url: 'http://api.wordnik.com:80/v4/word.json/' + word + '/definitions?limit=200&includeRelated=true&sourceDictionaries=wiktionary&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5',
+            url: 'http://api.wordnik.com:80/v4/word.json/' + newWord + '/definitions?limit=200&includeRelated=true&sourceDictionaries=wiktionary&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5',
             dataType: 'json',
             success: function(data) {
-                $('#def').html('<h1><span style="color:green;">Definition:</span> ' + data[0].text + '</h1>');
+                //$('#def').html('<h1><span style="color:green;">Definition:</span> ' + data[0].text + '</h1>');
                 word.def = data[0].text;
                 console.log(data[0].text);
             },

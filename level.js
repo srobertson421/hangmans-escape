@@ -9,6 +9,7 @@ Level.prototype = {
 
     preload: function() {
         
+        this.game.load.image('background', './assets/chalkboard.png');
         this.game.load.image('movingGround', './assets/ground.png');
         this.game.load.image('smallCloud', './assets/cloud2.png');
         this.game.load.image('bigCloud', './assets/cloud1.png');
@@ -16,16 +17,10 @@ Level.prototype = {
     },
     
     create: function() {
-        
-        letters.create();
-        
-        player.create();
-        
-        word.create();
-        
-        $('#def').append(word.def);
 
         this.game.physics.arcade.gravity.y = 500;
+        
+        this.bg = this.game.add.tileSprite(0, 0, 800, 320, 'background');
         
         // Making the ground and then making it move
         this.movingGround = this.game.add.tileSprite(0, this.game.world.height - 30, 800, 33, 'movingGround');
@@ -52,6 +47,12 @@ Level.prototype = {
         this.cloudSmall.checkWorldBounds = true;
         this.cloudSmall.events.onOutOfBounds.add(this.cloudOut, this);
         this.cloudSmall.body.velocity.x = -100;
+        
+        letters.create();
+        
+        player.create();
+        
+        word.create();
         
     },
     

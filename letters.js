@@ -169,6 +169,7 @@ Letters.prototype = {
         }
         
         this.wrongLetters += this.alph.splice(alphElement, 1) + ' ';
+        this.wrongLettersList.setText(this.wrongLetters);
         this.deathCounter++;
         this.counterMessage.setText('WRONG LETTERS: ' + this.deathCounter);
     },
